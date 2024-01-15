@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильтр пользователей</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Фильтр пользователей</h1>
+
+<p>Общее количество пользователей: {{ total_users_count }}</p>
+
+<form method="get" action="{% url 'user_filter' %}">
+    <label for="region">Выберите регион:</label>
+    <select name="region" id="region">
+        <option value="">Все пользователи</option>
+        {% for region in regions %}
+            <option value="{{ region }}">{{ region }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="min_age">Минимальный возраст:</label>
+    <input type="number" name="min_age" id="min_age" min="0">
+
+    <label for="max_age">Максимальный возраст:</label>
+    <input type="number" name="max_age" id="max_age" min="0">
+
+    <button type="submit">Применить фильтр</button>
+</form>
+
+<p>Отфильтрованное количество пользователей: {{ filtered_users_count }}</p>
+
+<!-- Display the list of filtered users if needed -->
+<!-- {% if selected_param %}
+    <ul>
+        {% for user in filtered_users %}
+            <li>{{ user.name }} - {{ user.age }} - {{ user.city }} - {{ user.region }}</li>
+        {% endfor %}
+    </ul>
+{% endif %} -->
+        
+</body>
+</html>
