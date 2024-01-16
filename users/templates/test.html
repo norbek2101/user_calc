@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильтр пользователей</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            width: 80%;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+            height: 80%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        form {
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        .form-container {   
+            max-height: 100%; /* Set your desired maximum height */
+            overflow-y: auto; /* Add a vertical scrollbar when content exceeds the height */
+            margin-top: 20; /* Adjust margin as needed */
+            margin-bottom: 50px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .form-group div {
+            flex-basis: 48%;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            width: 100%;
+        }
+
+        select,
+        input {
+            width: calc(100% - 10px);
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        aside {
+            width: 80%;
+            max-width: 800px;
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        /* Adjusted styles */
+        .form-group div.small-label {
+            flex-basis: 23%;
+            margin-bottom: 10px;
+        }
+
+        .form-group div.small-label label {
+            font-size: 14px;
+        }
+
+        .user-stats {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .stat {
+            margin-bottom: 15px;
+        }
+
+        .stat strong {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat span {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .title, h3 {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #10ee40;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 class="title">Фильтр пользователей</h1>
+
+    <main>  
+        <div class="form-container">
+            <form method="get" action="{% url 'user_filter' %}">
+                <h3>Место положения</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="country">Страна:</label>
+                        <select name="country" id="country">
+                            <option value="">Выберите страну</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="region">Регион:</label>
+                        <select name="region" id="region">
+                            <option value="">Выберите регион</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+                
+                <h3>Пол и возраст</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="gender">Выберите пол:</label>
+                        <select name="gender" id="gender">
+                            <option value="">Любой пол</option>
+                            <option value="Male">Мужской</option>
+                            <option value="Female">Женский</option>
+                        </select>
+                    </div>
+
+                    <div class="small-label">
+                        <label for="min_age">Мин. возраст:</label>
+                        <input type="number" name="min_age" id="min_age" min="0">
+                    </div>
+
+                    <div class="small-label">
+                        <label for="max_age">Макс. возраст:</label>
+                        <input type="number" name="max_age" id="max_age" min="0">
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Категория</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="category">Категория:</label>
+                        <select name="category" id="category">
+                            <option value="">Выберите категорию</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="frequency">Частота покупок:</label>
+                        <select name="frequency" id="frequency">
+                            <option value="">Выберите частоту</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Доход</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="family_income">Доход семьи:</label>
+                        <select name="family_income" id="family_income">
+                            <option value="">Выберите доход семьи</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="financial_situation">Материальное положение:</label>
+                        <select name="financial_situation" id="financial_situation">
+                            <option value="">Выберите финансовую ситуацию</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Семья и дети</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="marital_status">Семейное положение:</label>
+                        <select name="marital_status" id="marital_status">
+                            <option value="">Выберите семейное положение</option>
+                        </select>
+                    </div>
+                
+                
+                    <div>
+                        <label for="children_amount">Количество детей:</label>
+                        <select name="children_amount" id="children_amount">
+                            <option value="">Выберите количество детей</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label for="children_age_group">Возраст детей:</label>
+                        <select name="children_age_group" id="children_age_group">
+                            <option value="">Выберите возраст детей</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="expected_children">Ожидаемые дети:</label>
+                        <select name="expected_children" id="expected_children">
+                            <option value="">Выберите ожидаемое количество детей</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Образование</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="education_degree">Степень образования:</label>
+                        <select name="education_degree" id="education_degree">
+                            <option value="">Выберите степень образования</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="education_field">Область образования:</label>
+                        <select name="education_field" id="education_field">
+                            <option value="">Выберите область образования</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Банковские услуги</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="bank_client">Банковский клиент:</label>
+                        <select name="bank_client" id="bank_client">
+                            <option value="">Выберите статус банковского клиента</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="credit_history">Кредитная история:</label>
+                        <select name="credit_history" id="credit_history">
+                            <option value="">Выберите статус кредитной истории</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Работа</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="working_position">Должность:</label>
+                        <select name="working_position" id="working_position">
+                            <option value="">Выберите должность</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="business_size">Размер бизнеса:</label>
+                        <select name="business_size" id="business_size">
+                            <option value="">Выберите размер бизнеса</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <label for="company_legal_form">Организационно-правовая форма компании:</label>
+                        <select name="company_legal_form" id="company_legal_form">
+                            <option value="">Выберите форму компании</option>
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="banks_in_company">Банки в компании:</label>
+                        <select name="banks_in_company" id="banks_in_company">
+                            <option value="">Выберите банки в компании</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div>
+                        <label for="decision_role">Роль в принятии решений:</label>
+                        <select name="decision_role" id="decision_role">
+                            <option value="">Выберите роль в принятии решений</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Личный транспорт</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="driver's_license">Наличие водительских прав:</label>
+                        <select name="driver's_license" id="driver's_license">
+                            <option value="">Наличие водительских прав</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="having_care">Наличие автомобиля:</label>
+                        <select name="having_care" id="having_care">
+                            <option value="">Наличие автомобиля</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label for="car_brand">Марка автомобиля:</label>
+                        <select name="car_brand" id="car_brand">
+                            <option value="">Марка автомобиля</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Потребление алкоголя</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="alcohol_consumption">Потребления алкоголя:</label>
+                        <select name="alcohol_consumption" id="alcohol_consumption">
+                            <option value="">Потребления алкоголя</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <br>
+
+                <h3>Курение</h3>
+                <div class="form-group">
+                    <div>
+                        <label for="smoking_frequency">1-3 раза в день:</label>
+                        <select name="smoking_frequency" id="smoking_frequency">
+                            <option value="">Потребления алкоголя</option>
+                            
+                        </select>
+                    </div>
+                    <div>
+                        <label for="brand_cigarette">Марки сигарет:</label>
+                        <select name="brand_cigarette" id="brand_cigarette">
+                            <option value="">Марки сигарет</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <label for="preference">Предпочтение:</label>
+                        <select name="preference" id="preference">
+                            <option value="">Предпочтение</option>
+                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button type="submit">Применить фильтр</button>
+                </div>
+            </form>
+
+        </div>
+        <aside class="user-stats">
+            <div class="stat">
+                <strong>Общее количество пользователей:</strong>
+                <span>{{ total_users_count }}</span>
+            </div>
+            <div class="stat">
+                <strong>Отфильтрованное количество пользователей:</strong>
+                <span>{{ filtered_users_count }}</span>
+            </div>
+        </aside>
+    </main>
+    
+</body>
+
+</html>

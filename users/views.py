@@ -3,7 +3,8 @@ from django.views import View
 from .models import Usrs
 
 class UserFilterView(View):
-    template_name = 'user_filter.html'
+    template_name = 'test.html'
+
 
     def get(self, request, *args, **kwargs):
         total_users_count = Usrs.objects.count()
@@ -19,6 +20,7 @@ class UserFilterView(View):
         region_param = request.GET.get('region', '')
         min_age = request.GET.get('min_age', 0)
         max_age = request.GET.get('max_age', 100)
+        gender = request.GET.get('gender', '')
 
         if type(min_age) == str:
             min_age = int(min_age)
@@ -46,3 +48,5 @@ class UserFilterView(View):
         }
 
         return render(request, self.template_name, context)
+
+

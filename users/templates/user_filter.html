@@ -8,17 +8,46 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            margin: 20px;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
             color: #333;
+            margin-bottom: 20px;
+            width: 80%; /* Adjust the width as needed */
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 80%; /* Adjust the width as needed */
+            max-width: 800px; /* Set a maximum width if needed */
+            margin-bottom: 20px;
         }
 
         form {
-            margin-top: 20px;
-            max-width: 400px;
+            width: 100%; /* Make the form full width */
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
         }
 
         label {
@@ -26,18 +55,25 @@
             margin-bottom: 8px;
             font-weight: bold;
             color: #555;
+            width: 60%; /* Adjust the width as needed */
         }
 
         select, input {
-            width: 100%;
+            width: 100%; /* Adjust the width as needed */
             padding: 8px;
-            margin-bottom: 15px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
 
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
         button {
+            width: 48%; /* Adjust the width as needed */
             background-color: #4CAF50;
             color: white;
             padding: 10px 15px;
@@ -54,42 +90,255 @@
         li {
             margin-bottom: 5px;
         }
+
+        aside {
+            width: 80%; /* Adjust the width as needed */
+            max-width: 800px; /* Set a maximum width if needed */
+            text-align: right;
+            padding-right: 20px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
 
 <h1>Фильтр пользователей</h1>
 
-<p>Общее количество пользователей: {{ total_users_count }}</p>
+<main>
+    <form method="get" action="{% url 'user_filter' %}">
+        <div class="form-row">
+            <div>
+                <label for="country">Страна:</label>
+                <select name="country" id="country">
+                    <option value="">Выберите страну</option>
+                    <!-- Add country options here -->
+                </select>
+            </div>
 
-<form method="get" action="{% url 'user_filter' %}">
-    <label for="region">Выберите регион:</label>
-    <select name="region" id="region">
-        <option value="">Все пользователи</option>
-        {% for region in regions %}
-            <option value="{{ region }}">{{ region }}</option>
-        {% endfor %}
-    </select>
+            <div>
+                <label for="region">Регион:</label>
+                <select name="region" id="region">
+                    <option value="">Выберите регион</option>
+                    <!-- Add region options here -->
+                </select>
+            </div>
+        </div>
 
-    <label for="min_age">Минимальный возраст:</label>
-    <input type="number" name="min_age" id="min_age" min="0">
+        <div class="form-row">
+            <div>
+                <label for="city">Город:</label>
+                <select name="city" id="city">
+                    <option value="">Выберите город</option>
+                    <!-- Add city options here -->
+                </select>
+            </div>
 
-    <label for="max_age">Максимальный возраст:</label>
-    <input type="number" name="max_age" id="max_age" min="0">
+            <div>
+                <label for="district">Район:</label>
+                <select name="district" id="district">
+                    <option value="">Выберите район</option>
+                    <!-- Add district options here -->
+                </select>
+            </div>
+        </div>
 
-    <button type="submit">Применить фильтр</button>
-</form>
+        <div class="form-row">
+            <div>
+                <label for="gender">Выберите пол:</label>
+                <select name="gender" id="gender">
+                    <option value="">Любой пол</option>
+                    <option value="Male">Мужской</option>
+                    <option value="Female">Женский</option>
+                </select>
+            </div>
+        
+            <div>
+                <label for="min_age">Минимальный возраст:</label>
+                <input type="number" name="min_age" id="min_age" min="0">
+            </div>
+        
+            <div>
+                <label for="max_age">Максимальный возраст:</label>
+                <input type="number" name="max_age" id="max_age" min="0">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="category">Категория:</label>
+                <select name="category" id="category">
+                    <option value="">Выберите категорию</option>
+                    <!-- Add category options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="frequency">Частота покупок:</label>
+                <select name="frequency" id="frequency">
+                    <option value="">Выберите частоту</option>
+                    <!-- Add frequency options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="family_income">Доход семьи:</label>
+                <select name="family_income" id="family_income">
+                    <option value="">Выберите доход семьи</option>
+                    <!-- Add family income options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="financial_situation">Финансовая ситуация:</label>
+                <select name="financial_situation" id="financial_situation">
+                    <option value="">Выберите финансовую ситуацию</option>
+                    <!-- Add financial situation options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="family_situation">Семейная ситуация:</label>
+                <select name="family_situation" id="family_situation">
+                    <option value="">Выберите семейную ситуацию</option>
+                    <!-- Add family situation options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="children_amount">Количество детей:</label>
+                <select name="children_amount" id="children_amount">
+                    <option value="">Выберите количество детей</option>
+                    <!-- Add children amount options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="children_age_group">Возраст детей:</label>
+                <select name="children_age_group" id="children_age_group">
+                    <option value="">Выберите возраст детей</option>
+                    <!-- Add children age group options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="expected_children">Ожидаемые дети:</label>
+                <select name="expected_children" id="expected_children">
+                    <option value="">Выберите ожидаемое количество детей</option>
+                    <!-- Add expected children options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="education_degree">Степень образования:</label>
+                <select name="education_degree" id="education_degree">
+                    <option value="">Выберите степень образования</option>
+                    <!-- Add education degree options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="education_field">Область образования:</label>
+                <select name="education_field" id="education_field">
+                    <option value="">Выберите область образования</option>
+                    <!-- Add education field options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="bank_client">Банковский клиент:</label>
+                <select name="bank_client" id="bank_client">
+                    <option value="">Выберите статус банковского клиента</option>
+                    <!-- Add bank client options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="credit_history">Кредитная история:</label>
+                <select name="credit_history" id="credit_history">
+                    <option value="">Выберите статус кредитной истории</option>
+                    <!-- Add credit history options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="working_position">Должность:</label>
+                <select name="working_position" id="working_position">
+                    <option value="">Выберите должность</option>
+                    <!-- Add working position options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="business_size">Размер бизнеса:</label>
+                <select name="business_size" id="business_size">
+                    <option value="">Выберите размер бизнеса</option>
+                    <!-- Add business size options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="company_legal_form">Организационно-правовая форма компании:</label>
+                <select name="company_legal_form" id="company_legal_form">
+                    <option value="">Выберите форму компании</option>
+                    <!-- Add company legal form options here -->
+                </select>
+            </div>
+        
+            <div>
+                <label for="banks_in_company">Банки в компании:</label>
+                <select name="banks_in_company" id="banks_in_company">
+                    <option value="">Выберите банки в компании</option>
+                    <!-- Add banks in company options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div>
+                <label for="decision_role">Роль в принятии решений:</label>
+                <select name="decision_role" id="decision_role">
+                    <option value="">Выберите роль в принятии решений</option>
+                    <!-- Add decision role options here -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="button-row">
+            <button type="submit">Применить фильтр</button>
+        </div>
+    </form>
 
-<p>Отфильтрованное количество пользователей: {{ filtered_users_count }}</p>
+    {% if selected_param %}
+        <ul>
+            {% for user in filtered_users %}
+                <li>{{ user.name }} - {{ user.age }} - {{ user.city }} - {{ user.region }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</main>
 
-<!-- Display the list of filtered users if needed -->
-<!-- {% if selected_param %}
-    <ul>
-        {% for user in filtered_users %}
-            <li>{{ user.name }} - {{ user.age }} - {{ user.city }} - {{ user.region }}</li>
-        {% endfor %}
-    </ul>
-{% endif %} -->
+<aside>
+    <p>Общее количество пользователей: {{ total_users_count }}</p>
+    <p>Отфильтрованное количество пользователей: {{ filtered_users_count }}</p>
+</aside>
         
 </body>
 </html>
+
